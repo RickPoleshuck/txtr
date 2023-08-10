@@ -6,10 +6,7 @@ import 'package:txtr_dsk/src/settings/settings_view.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_bloc.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_event.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_state.dart';
-import 'package:txtr_dsk/src/views/messages/bloc/messages_bloc.dart';
 import 'package:txtr_shared/txtr_shared.dart';
-
-import '../messages/bloc/messages_event.dart';
 
 class MessageView extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();

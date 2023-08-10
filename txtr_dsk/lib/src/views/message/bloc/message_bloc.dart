@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:txtr_dsk/src/net/net_repository.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_event.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_state.dart';
-import 'package:txtr_dsk/src/views/messages/bloc/messages_event.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 class MessageBloc extends Bloc<MessageEvent, MessageState> {

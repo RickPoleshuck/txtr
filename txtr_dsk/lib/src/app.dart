@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/views/contacts/contacts_view.dart';
+import 'package:txtr_dsk/src/views/error/error_bloc.dart';
+import 'package:txtr_dsk/src/views/error/error_view.dart';
 import 'package:txtr_dsk/src/views/message/message_view.dart';
 import 'package:txtr_dsk/src/views/messages/messages_view.dart';
 
@@ -16,8 +18,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SettingsBloc()..add(SettingsLoadEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+          SettingsBloc()
+            ..add(SettingsLoadEvent()),
+        ),
+        BlocProvider(
+          create: (_) => ErrorBloc(),
+        ),
+      ],
       child: MaterialApp(
         restorationScopeId: 'app',
         localizationsDelegates: const [
@@ -42,6 +53,8 @@ class App extends StatelessWidget {
                   return MessageView();
                 case ContactsView.routeName:
                   return ContactsView();
+                case ErrorView.routeName:
+                  return ErrorView();
                 case MessagesView.routeName:
                 default:
                   return MessagesView();

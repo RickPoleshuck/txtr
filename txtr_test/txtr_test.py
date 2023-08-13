@@ -3,7 +3,7 @@
 import json
 import socket
 
-from flask import Flask, Response
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -15,9 +15,29 @@ def index():
 
 @app.route('/api/messages', methods=['GET'])
 def get_messages():
-    return '''
-    
-    '''
+    messages = [
+        {
+            'id': 1,
+            'name': 'joe',
+            'address': '+1 908 555 1212',
+            'body': 'test message 1',
+            'read': False,
+            'sent': False,
+        },
+        {
+            'id': 2,
+            'name': 'fred',
+            'address': '+1 908 555 1212',
+            'body': 'test message 1',
+            'read': False,
+            'sent': True,
+        },
+    ]
+    return json.dumps(messages)
+
+@app.route('/api/login', methods=['POST'])
+def post_login():
+    return 'fakeToken'
 
 
 @app.route('/api/phone', methods=['GET'])

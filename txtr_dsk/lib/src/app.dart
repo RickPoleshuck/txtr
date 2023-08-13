@@ -8,6 +8,8 @@ import 'package:txtr_dsk/src/views/contacts/contacts_view.dart';
 import 'package:txtr_dsk/src/views/error/error_bloc.dart';
 import 'package:txtr_dsk/src/views/error/error_view.dart';
 import 'package:txtr_dsk/src/views/message/message_view.dart';
+import 'package:txtr_dsk/src/views/messages/bloc/messages_bloc.dart';
+import 'package:txtr_dsk/src/views/messages/bloc/messages_event.dart';
 import 'package:txtr_dsk/src/views/messages/messages_view.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
@@ -28,6 +30,9 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) => ErrorBloc(),
         ),
+        BlocProvider(
+          create: (_) => MessagesBloc(),
+        ),
       ],
       child: MaterialApp.router(
         restorationScopeId: 'app',
@@ -46,7 +51,12 @@ class App extends StatelessWidget {
           routes: [
             GoRoute(
               path: MessagesView.routeName,
-              builder: (context, state) => MessagesView(),
+              builder: (context, state) {
+                MessagesBloc bloc = BlocProvider.of<MessagesBloc>(context);
+                bloc.add(MessagesLoadEvent());
+                return  MessagesView(
+                    messagesBloc: bloc);
+              }
             ),
             GoRoute(
               path: MessageView.routeName,

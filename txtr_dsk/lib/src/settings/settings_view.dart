@@ -29,7 +29,7 @@ class SettingsView extends StatelessWidget {
               listener: (context, state) {
                 debugPrint('SettingsView.blocConsumer: state = $state');
             if (state is SettingsSaved) {
-              context.replace(MessagesView.routeName);
+              context.pop();
             }
           }, builder: (context, state) {
             switch (state) {

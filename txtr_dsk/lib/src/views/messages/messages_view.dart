@@ -21,17 +21,18 @@ import 'bloc/messages_state.dart';
 class MessagesView extends StatelessWidget with WindowListener {
   MessagesView({
     super.key,
+    required this.messagesBloc,
   });
 
   Timer? refreshTimer;
   static const routeName = '/messages';
-  static final MessagesBloc _messagesBloc = MessagesBloc();
+  final MessagesBloc messagesBloc;
 
   @override
   void onWindowFocus() {
-    _messagesBloc.add(MessagesCheckEvent());
+    messagesBloc.add(MessagesCheckEvent());
     refreshTimer = Timer.periodic(const Duration(minutes: 1), (_) {
-      _messagesBloc.add(MessagesCheckEvent());
+      messagesBloc.add(MessagesCheckEvent());
     });
   }
 
@@ -46,53 +47,50 @@ class MessagesView extends StatelessWidget with WindowListener {
   Widget build(BuildContext context) {
     windowManager.addListener(this);
     String phoneName = SettingsService.load().phone.name;
-    return BlocProvider(
-      create: (context) => _messagesBloc..add(MessagesLoadEvent()),
-      child: TxtrScaffold(
-        bloc: _messagesBloc,
-        context: context,
-        appBar: AppBar(
-          title: BlocConsumer<SettingsBloc, SettingsState>(
-            listener: (context, state) {
-              if (state is SettingsSaved) {
-                phoneName = state.settings.phone.name;
-              }
-            },
-            builder: (context, state) {
-              return Text('SMS Messages - $phoneName');
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                context.push(SettingsView.routeName);
-              },
-            ),
-          ],
-        ),
-        body: BlocBuilder<MessagesBloc, MessagesState>(
-          builder: (context, state) {
-            switch (state) {
-              case MessagesLoadingState():
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              case MessagesLoadedState():
-                final messages = state.messages;
-                return ListView.builder(
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final messagesPerContact = messages[index];
-                      return _ContactTile(messagesPerContact, context);
-                    });
-              case MessagesErrorState():
-                return Center(
-                  child: Text('Error: ${state.error}'),
-                );
+    return TxtrScaffold(
+      bloc: messagesBloc,
+      context: context,
+      appBar: AppBar(
+        title: BlocConsumer<SettingsBloc, SettingsState>(
+          listener: (context, state) {
+            if (state is SettingsSaved) {
+              phoneName = state.settings.phone.name;
             }
           },
+          builder: (context, state) {
+            return Text('SMS Messages - $phoneName');
+          },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              context.push(SettingsView.routeName);
+            },
+          ),
+        ],
+      ),
+      body: BlocBuilder<MessagesBloc, MessagesState>(
+        builder: (context, state) {
+          switch (state) {
+            case MessagesLoadingState():
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case MessagesLoadedState():
+              final messages = state.messages;
+              return ListView.builder(
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final messagesPerContact = messages[index];
+                    return _ContactTile(messagesPerContact, context);
+                  });
+            case MessagesErrorState():
+              return Center(
+                child: Text('Error: ${state.error}'),
+              );
+          }
+        },
       ),
     );
   }

@@ -68,7 +68,7 @@ class ContactsView extends StatelessWidget with WindowListener {
                           int index = state.contacts.indexWhere((c) => c.name
                               .toLowerCase()
                               .startsWith(value!.toLowerCase()));
-                          if (index > 0) {
+                          if (index >= 0) {
                             itemScrollController.jumpTo(index: index);
                           }
                         }

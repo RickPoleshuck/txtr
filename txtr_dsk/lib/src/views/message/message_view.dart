@@ -80,6 +80,7 @@ class MessageView extends StatelessWidget {
                                   context.read<MessageBloc>().add(
                                       MessageSendEvent(
                                           TxtrMessageDTO.fromJson(formData)));
+                                  // @TODO - move context.pop to listener for success of sendevent
                                   context.pop();
                                 },
                                 child: const Text('Send')),

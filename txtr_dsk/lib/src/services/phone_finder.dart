@@ -16,14 +16,14 @@ class PhoneFinder {
   Future<bool> checkPreviousPhone() async {
     final SettingsModel settings = SettingsService.load();
     try {
-      final PhoneDTO phone = await _netRepository.getPhone(settings.phoneIp);
-      return phone.name == settings.phoneName;
+      final PhoneDTO phone = await _netRepository.getPhone(settings.phone.ip);
+      return phone.name == settings.phone.name;
     } catch (_) {
-      if (settings.phoneName.isNotEmpty) {
-        final previousPhone = await getPhoneByName(settings.phoneName);
-        if (previousPhone.name == settings.phoneName) {
+      if (settings.phone.name.isNotEmpty) {
+        final previousPhone = await getPhoneByName(settings.phone.name);
+        if (previousPhone.name == settings.phone.name) {
           // Phone with same name found, but different ip
-          settings.phoneIp = previousPhone.ip;
+          settings.phone = previousPhone;
           SettingsService.save(settings);
           return true;
         }
@@ -44,7 +44,7 @@ class PhoneFinder {
     ).listen(
       (host) async {
         // found host, check that name matches
-        final phone = await getPhone(host.address);
+        final phone = await _getPhone(host.address);
         if (phone.name == phoneName) {
           completer.complete(phone);
         }
@@ -56,7 +56,22 @@ class PhoneFinder {
     return await completer.future;
   }
 
-  Future<List<ActiveHost>> findHosts() async {
+  Future<List<PhoneDTO>> findPhones() async {
+    final hosts = await _findHosts();
+    final List<PhoneDTO> phones = [];
+    for (final h in hosts) {
+      try {
+        final PhoneDTO phone = await _getPhone(h.address);
+        phones.add(phone);
+      } catch (e) {
+        // ignore hosts that don't respond to getPhone
+        debugPrint('getPhone(${h.address}): $e');
+      }
+    }
+    return phones;
+  }
+
+  Future<List<ActiveHost>> _findHosts() async {
     final String? myIp = await NetworkInfo().getWifiIP();
     if (myIp == null) return [];
     final completer = Completer<List<ActiveHost>>();
@@ -78,7 +93,7 @@ class PhoneFinder {
     return await completer.future;
   }
 
-  Future<PhoneDTO> getPhone(final String ip) async {
+  Future<PhoneDTO> _getPhone(final String ip) async {
     return await _netRepository.getPhone(ip);
   }
 }

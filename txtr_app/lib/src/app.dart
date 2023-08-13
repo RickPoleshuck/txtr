@@ -6,7 +6,6 @@ import 'settings/settings_view.dart';
 import 'sms/sms_item_details_view.dart';
 import 'sms/sms_item_list_view.dart';
 
-/// The Widget that configures your application.
 class App extends StatelessWidget {
   const App({
     super.key,

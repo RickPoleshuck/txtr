@@ -49,7 +49,7 @@ class ContactsView extends StatelessWidget with WindowListener {
         bloc: _contactsBloc,
         context: context,
         appBar: AppBar(
-          title: Text('SMS Contacts - ${settings.phoneName}'),
+          title: Text('SMS Contacts - ${settings.phone.name}'),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),

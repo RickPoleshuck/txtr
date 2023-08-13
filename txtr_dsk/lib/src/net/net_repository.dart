@@ -22,12 +22,13 @@ class NetRepository {
   Future<String> getUpdates() async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phoneIp}:${TxtrShared.restPort}/api/updates';
+        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/updates';
     Response response = await _dio
         .get(url, queryParameters: {'idToken': SettingsService.idToken});
     if (response.statusCode == 200) {
       return response.data;
     } else {
+      debugPrint('getMessages(): $response');
       throw Exception(response.statusMessage);
     }
   }
@@ -35,7 +36,7 @@ class NetRepository {
   Future<List<TxtrContactDTO>> getContacts(final DateTime lastUpdate) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phoneIp}:${TxtrShared.restPort}/api/contacts';
+        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/contacts';
     Response response = await _dio.get(url, queryParameters: {
       'idToken': SettingsService.idToken,
       'lastUpdate': lastUpdate
@@ -50,6 +51,7 @@ class NetRepository {
         rethrow;
       }
     } else {
+      debugPrint('getMessages(): $response');
       throw Exception(response.statusMessage);
     }
   }
@@ -57,7 +59,7 @@ class NetRepository {
   Future<List<List<TxtrMessageDTO>>> getMessages() async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phoneIp}:${TxtrShared.restPort}/api/messages';
+        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/messages';
     Response response = await _dio
         .get(url, queryParameters: {'idToken': SettingsService.idToken});
     if (response.statusCode == 200) {
@@ -82,6 +84,7 @@ class NetRepository {
       });
       return result;
     } else {
+      debugPrint('getMessages(): $response');
       throw Exception(response.statusMessage);
     }
   }
@@ -95,6 +98,7 @@ class NetRepository {
     if (response.statusCode == 200) {
       return PhoneDTO.fromJson(jsonDecode(response.data));
     } else {
+      debugPrint('getMessages(): $response');
       throw Exception(response.statusMessage);
     }
   }
@@ -102,12 +106,13 @@ class NetRepository {
   Future<String> login(final String login, final String passwd) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phoneIp}:${TxtrShared.restPort}/api/login';
+        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/login';
     Response response =
         await _dio.post(url, data: {'login': login, 'passwd': passwd});
     if (response.statusCode == 200) {
       return response.data;
     } else {
+      debugPrint('getMessages(): $response');
       throw Exception(response.statusMessage);
     }
   }
@@ -115,13 +120,14 @@ class NetRepository {
   Future<void> postMessage(final TxtrMessageDTO message) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phoneIp}:${TxtrShared.restPort}/api/message';
+        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/message';
     Response response = await _dio.post(url,
         data: jsonEncode(message),
         queryParameters: {'idToken': SettingsService.idToken});
     if (response.statusCode == 200) {
       return;
     } else {
+      debugPrint('getMessages(): $response');
       throw Exception(response.statusMessage);
     }
   }

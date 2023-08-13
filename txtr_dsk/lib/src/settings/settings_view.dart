@@ -4,6 +4,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
+import 'package:txtr_dsk/src/views/messages/messages_view.dart';
+import 'package:txtr_shared/txtr_shared.dart';
 
 class SettingsView extends StatelessWidget {
   SettingsView({super.key});
@@ -22,13 +24,14 @@ class SettingsView extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: BlocProvider(
           create: (_) => SettingsBloc()..add(SettingsLoadEvent()),
-          child: BlocBuilder<SettingsBloc, SettingsState>(
-              builder: (context, state) {
+          child: BlocConsumer<SettingsBloc, SettingsState>(
+              listener: (context, state) {
+                debugPrint('SettingsView.blocConsumer: state = $state');
+            if (state is SettingsSaved) {
+              Navigator.popAndPushNamed(context, MessagesView.routeName);
+            }
+          }, builder: (context, state) {
             switch (state) {
-              case SettingsLoading():
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
               case SettingsLoaded():
                 return FormBuilder(
                     key: _formKey,
@@ -46,7 +49,7 @@ class SettingsView extends StatelessWidget {
                             ),
                           )),
                           decoration: const TxtrInputDecoration('Phone Name'),
-                          initialValue: state.settings.phoneIp,
+                          initialValue: state.settings.phone.ip,
                           dropdownColor: Colors.white,
                         ),
                         FormBuilderTextField(
@@ -72,15 +75,11 @@ class SettingsView extends StatelessWidget {
                                   _formKey.currentState!.save();
                                   final formData = _formKey.currentState!.value;
                                   final SettingsModel settings =
-                                      SettingsModel.fromJson(formData);
-                                  settings.phoneName = state.phones
-                                      .firstWhere(
-                                          (p) => p.ip == settings.phoneIp)
-                                      .name; // @TODO get this from the value of the field???
+                                      _settingsFromForm(formData, state.phones);
+                                  Navigator.pop(context);
                                   context
                                       .read<SettingsBloc>()
                                       .add(SettingsSaveEvent(settings));
-                                  Navigator.pop(context);
                                 },
                                 child: const Text('Save')),
                             ElevatedButton(
@@ -92,11 +91,24 @@ class SettingsView extends StatelessWidget {
                         )
                       ],
                     ));
+              default:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
             }
           }),
         ),
       ),
     );
+  }
+
+  SettingsModel _settingsFromForm(
+      final Map formData, final List<PhoneDTO> phones) {
+    final String ip = formData['phoneIp'];
+    PhoneDTO phone = phones.firstWhere((p) => p.ip == ip);
+    SettingsModel settings =
+        SettingsModel(formData['login'], formData['passwd'], phone, '');
+    return settings;
   }
 }
 

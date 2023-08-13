@@ -1,36 +1,31 @@
+import 'dart:convert';
+
+import 'package:txtr_shared/txtr_shared.dart';
+
 class SettingsModel {
   final String login;
   final String passwd;
-  final String theme;
-  late String phoneIp;
-  late String phoneName;
+  PhoneDTO phone;
   final String idToken;
 
-  SettingsModel(this.login, this.passwd, this.theme, this.phoneIp,
-      this.phoneName, this.idToken);
+  SettingsModel(this.login, this.passwd, this.phone, this.idToken);
 
   SettingsModel.fromJson(Map<String, dynamic> json)
       : login = json['login'],
         passwd = json['passwd'],
-        theme = json['theme'] ?? '',
-        phoneIp = json['phoneIp'] ?? '',
-        phoneName = json['phoneName'] ?? '',
+        phone = json['phone'] != null ? PhoneDTO.fromJson(jsonDecode(json['phone']) ): PhoneDTO.empty(),
         idToken = json['idToken'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'login': login,
         'passwd': passwd,
-        'theme': theme,
-        'phoneIp': phoneIp,
-        'phoneName': phoneName,
+        'phone': jsonEncode(phone),
         'idToken': idToken,
       };
 
   SettingsModel.empty()
       : login = '',
         passwd = '',
-        theme = '',
-        phoneIp = '',
-        phoneName = '',
+        phone = PhoneDTO.empty(),
         idToken = '';
 }

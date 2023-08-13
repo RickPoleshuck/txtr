@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
+import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
 import 'package:txtr_dsk/src/utils/datetime_utils.dart';
 import 'package:txtr_dsk/src/views/message/message_view.dart';
@@ -43,16 +44,20 @@ class MessagesView extends StatelessWidget with WindowListener {
   @override
   Widget build(BuildContext context) {
     windowManager.addListener(this);
+    String phoneName = SettingsService.load().phone.name;
     return BlocProvider(
       create: (context) => _messagesBloc..add(MessagesLoadEvent()),
       child: TxtrScaffold(
         bloc: _messagesBloc,
         context: context,
         appBar: AppBar(
-          title: BlocBuilder<SettingsBloc, SettingsState>(
+          title: BlocConsumer<SettingsBloc, SettingsState>(
+            listener: (context, state) {
+              if (state is SettingsSaved) {
+                phoneName = state.settings.phone.name;
+              }
+            },
             builder: (context, state) {
-              String phoneName =
-                  state is SettingsLoaded ? state.settings.phoneName : '';
               return Text('SMS Messages - $phoneName');
             },
           ),

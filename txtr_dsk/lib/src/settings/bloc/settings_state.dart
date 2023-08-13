@@ -18,3 +18,12 @@ class SettingsLoaded extends SettingsState {
 
   const SettingsLoaded(this.settings, this.phones);
 }
+
+class SettingsSaved extends SettingsState {
+  final SettingsModel settings;
+
+  @override
+  List<Object> get props => [settings];
+
+  const SettingsSaved(this.settings);
+}

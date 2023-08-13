@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_bloc.dart';
 import 'package:txtr_dsk/src/views/message/bloc/message_event.dart';
@@ -10,17 +11,16 @@ import 'package:txtr_shared/txtr_shared.dart';
 
 class MessageView extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  final TxtrContactDTO contact;
   MessageView({
     super.key,
+    required this.contact,
   });
 
   static const routeName = '/message';
 
   @override
   Widget build(BuildContext context) {
-    final contact =
-        ModalRoute.of(context)!.settings.arguments as TxtrContactDTO?;
     return BlocProvider(
       create: (context) => MessageBloc()
         ..add(MessageLoadedEvent(context, TxtrMessageDTO.empty())),
@@ -31,7 +31,7 @@ class MessageView extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.restorablePushNamed(context, SettingsView.routeName);
+                context.push(SettingsView.routeName);
               },
             ),
           ],
@@ -54,14 +54,14 @@ class MessageView extends StatelessWidget {
                           validator: FormBuilderValidators.match('^.{4,}\$',
                               errorText: 'Requires at least 4 characters'),
                           decoration: const TxtrInputDecoration('Name'),
-                          initialValue: contact?.name ?? '',
+                          initialValue: contact.name,
                         ),
                         FormBuilderTextField(
                           name: 'address',
                           validator: FormBuilderValidators.match('^.{4,}\$',
                               errorText: 'Requires at least 4 characters'),
                           decoration: const TxtrInputDecoration('Address'),
-                          initialValue: contact?.phones[0].number ?? '',
+                          initialValue: contact.phones[0].number,
                         ),
                         FormBuilderTextField(
                           name: 'body',
@@ -80,7 +80,7 @@ class MessageView extends StatelessWidget {
                                   context.read<MessageBloc>().add(
                                       MessageSendEvent(
                                           TxtrMessageDTO.fromJson(formData)));
-                                  Navigator.pop(context);
+                                  context.pop();
                                 },
                                 child: const Text('Send')),
                             ElevatedButton(

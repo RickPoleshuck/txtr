@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
 import 'package:txtr_dsk/src/views/messages/messages_view.dart';
@@ -28,7 +29,7 @@ class SettingsView extends StatelessWidget {
               listener: (context, state) {
                 debugPrint('SettingsView.blocConsumer: state = $state');
             if (state is SettingsSaved) {
-              Navigator.popAndPushNamed(context, MessagesView.routeName);
+              context.replace(MessagesView.routeName);
             }
           }, builder: (context, state) {
             switch (state) {
@@ -76,7 +77,6 @@ class SettingsView extends StatelessWidget {
                                   final formData = _formKey.currentState!.value;
                                   final SettingsModel settings =
                                       _settingsFromForm(formData, state.phones);
-                                  Navigator.pop(context);
                                   context
                                       .read<SettingsBloc>()
                                       .add(SettingsSaveEvent(settings));

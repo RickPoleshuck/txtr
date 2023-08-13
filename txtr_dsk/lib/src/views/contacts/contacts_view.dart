@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
@@ -89,8 +90,8 @@ class ContactsView extends StatelessWidget with WindowListener {
 class _ContactTile extends GestureDetector {
   _ContactTile(this.contact, this.context, {super.key})
       : super(
-            onTap: () => Navigator.pushNamed(context, MessageView.routeName,
-                arguments: contact),
+            onTap: () => context.push(MessageView.routeName,
+                extra: contact),
             child: Text(contact.name));
 
   final BuildContext context;

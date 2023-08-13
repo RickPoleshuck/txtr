@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
@@ -65,7 +66,7 @@ class MessagesView extends StatelessWidget with WindowListener {
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.restorablePushNamed(context, SettingsView.routeName);
+                context.push(SettingsView.routeName);
               },
             ),
           ],
@@ -116,8 +117,8 @@ class _ContactTileState extends State<_ContactTile> {
       children: [
         IconButton(
           onPressed: () {
-            Navigator.pushNamed(context, MessageView.routeName,
-                arguments: _contactFromMessage(widget.contactMessages[0]));
+            context.push(MessageView.routeName,
+                extra: _contactFromMessage(widget.contactMessages[0]));
           },
           icon: const Icon(Icons.reply),
         ),

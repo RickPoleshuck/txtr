@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
 import 'package:txtr_dsk/src/views/error/error_bloc.dart';
 import 'package:txtr_dsk/src/views/txtr_scaffold.dart';
@@ -25,7 +26,7 @@ class ErrorView extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.restorablePushNamed(context, SettingsView.routeName);
+                context.push(SettingsView.routeName);
               },
             ),
           ],

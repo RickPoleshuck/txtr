@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/views/contacts/contacts_view.dart';
 import 'package:txtr_dsk/src/views/message/message_view.dart';
 import 'package:txtr_dsk/src/views/messages/bloc/messages_event.dart';
@@ -39,13 +40,13 @@ class _TxtrNavigationBar extends BottomNavigationBar {
           onTap: (index) {
             switch (index) {
               case 0:
-                Navigator.pushNamed(context, MessageView.routeName);
+                context.push(MessageView.routeName);
                 break;
               case 1:
                 bloc.add(MessagesLoadEvent());
                 break;
               case 2:
-                Navigator.pushNamed(context, ContactsView.routeName);
+                context.push(ContactsView.routeName);
                 break;
             }
           },

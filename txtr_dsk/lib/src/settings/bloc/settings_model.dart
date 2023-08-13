@@ -13,7 +13,9 @@ class SettingsModel {
   SettingsModel.fromJson(Map<String, dynamic> json)
       : login = json['login'],
         passwd = json['passwd'],
-        phone = json['phone'] != null ? PhoneDTO.fromJson(jsonDecode(json['phone']) ): PhoneDTO.empty(),
+        phone = json['phone'] != null
+            ? PhoneDTO.fromJson(jsonDecode(json['phone']))
+            : PhoneDTO.empty(),
         idToken = json['idToken'] ?? '';
 
   Map<String, dynamic> toJson() => {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
@@ -55,7 +56,7 @@ class ContactsView extends StatelessWidget with WindowListener {
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.restorablePushNamed(context, SettingsView.routeName);
+                context.push(SettingsView.routeName);
               },
             ),
           ],
@@ -69,7 +70,7 @@ class ContactsView extends StatelessWidget with WindowListener {
                 );
               case ContactsLoadedState():
                 final contacts = state.contacts;
-                return ListView.builder(
+                return ScrollablePositionedList.builder(
                     itemCount: contacts.length,
                     itemBuilder: (context, index) {
                       final contact = contacts[index];
@@ -87,13 +88,51 @@ class ContactsView extends StatelessWidget with WindowListener {
   }
 }
 
-class _ContactTile extends GestureDetector {
-  _ContactTile(this.contact, this.context, {super.key})
-      : super(
-            onTap: () => context.push(MessageView.routeName,
-                extra: contact),
-            child: Text(contact.name));
+class _ContactTile extends StatefulWidget {
+  _ContactTile(this.contact, this.context, {super.key});
 
-  final BuildContext context;
   final TxtrContactDTO contact;
+  final BuildContext context;
+  bool expanded = false;
+
+  @override
+  State<_ContactTile> createState() => _ContactTileState();
+}
+
+class _ContactTileState extends State<_ContactTile> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IconButton(
+          onPressed: () {
+            context.push(MessageView.routeName, extra: widget.contact);
+          },
+          icon: const Icon(Icons.reply),
+        ),
+        Expanded(
+          child: ExpansionTile(
+              onExpansionChanged: (expanded) {
+                setState(() {
+                  widget.expanded = expanded;
+                });
+                debugPrint('expanded: $expanded');
+              },
+              title: Text(
+                '${widget.contact.name}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              children: widget.contact.phones
+                  .map(
+                    (m) => SizedBox(
+                      width: double.infinity,
+                      child: Text('${m.number} - ${m.label}'),
+                    ),
+                  )
+                  .toList()),
+        ),
+      ],
+    );
+  }
 }

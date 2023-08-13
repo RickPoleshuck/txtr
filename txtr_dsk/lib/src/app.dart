@@ -50,14 +50,12 @@ class App extends StatelessWidget {
         routerConfig: GoRouter(
           routes: [
             GoRoute(
-              path: MessagesView.routeName,
-              builder: (context, state) {
-                MessagesBloc bloc = BlocProvider.of<MessagesBloc>(context);
-                bloc.add(MessagesLoadEvent());
-                return  MessagesView(
-                    messagesBloc: bloc);
-              }
-            ),
+                path: MessagesView.routeName,
+                builder: (context, state) {
+                  MessagesBloc bloc = BlocProvider.of<MessagesBloc>(context);
+                  bloc.add(MessagesLoadEvent());
+                  return MessagesView(messagesBloc: bloc);
+                }),
             GoRoute(
               path: MessageView.routeName,
               builder: (context, state) {

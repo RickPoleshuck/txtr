@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:go_router/go_router.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
 import 'package:txtr_dsk/src/settings/settings_view.dart';
@@ -79,7 +80,7 @@ class MessagesView extends StatelessWidget with WindowListener {
               );
             case MessagesLoadedState():
               final messages = state.messages;
-              return ListView.builder(
+              return ScrollablePositionedList.builder(
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final messagesPerContact = messages[index];

@@ -6,7 +6,6 @@ import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 part 'settings_event.dart';
-
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {

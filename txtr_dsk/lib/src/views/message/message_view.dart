@@ -12,6 +12,7 @@ import 'package:txtr_shared/txtr_shared.dart';
 class MessageView extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();
   final TxtrContactDTO contact;
+
   MessageView({
     super.key,
     required this.contact,

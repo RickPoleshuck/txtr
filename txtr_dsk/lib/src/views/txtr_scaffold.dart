@@ -7,7 +7,8 @@ import 'package:txtr_dsk/src/views/messages/bloc/messages_event.dart';
 
 class TxtrScaffold extends Scaffold {
   TxtrScaffold(
-      {super.key, required Widget body,
+      {super.key,
+      required Widget body,
       required BuildContext context,
       required Bloc bloc,
       AppBar? appBar,

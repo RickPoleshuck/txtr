@@ -5,7 +5,6 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
-import 'package:txtr_dsk/src/views/messages/messages_view.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 class SettingsView extends StatelessWidget {
@@ -27,7 +26,7 @@ class SettingsView extends StatelessWidget {
           create: (_) => SettingsBloc()..add(SettingsLoadEvent()),
           child: BlocConsumer<SettingsBloc, SettingsState>(
               listener: (context, state) {
-                debugPrint('SettingsView.blocConsumer: state = $state');
+            debugPrint('SettingsView.blocConsumer: state = $state');
             if (state is SettingsSaved) {
               context.pop();
             }

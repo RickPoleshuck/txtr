@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:network_tools/network_tools.dart';
 import 'package:txtr_dsk/src/net/net_repository.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 final List<ActiveHost> phones = [];

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_dsk/src/views/contacts/contacts_view.dart';
 import 'package:txtr_dsk/src/views/error/error_bloc.dart';
 import 'package:txtr_dsk/src/views/error/error_view.dart';
@@ -11,9 +10,9 @@ import 'package:txtr_dsk/src/views/message/message_view.dart';
 import 'package:txtr_dsk/src/views/messages/bloc/messages_bloc.dart';
 import 'package:txtr_dsk/src/views/messages/bloc/messages_event.dart';
 import 'package:txtr_dsk/src/views/messages/messages_view.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_bloc.dart';
+import 'package:txtr_dsk/src/views/settings/settings_view.dart';
 import 'package:txtr_shared/txtr_shared.dart';
-
-import 'settings/settings_view.dart';
 
 class App extends StatelessWidget {
   const App({

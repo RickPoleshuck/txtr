@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:txtr_dsk/src/globals.dart';
 import 'package:txtr_dsk/src/net/net_repository.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
 
 class SettingsService {
   static const String settingsKey = 'settings';

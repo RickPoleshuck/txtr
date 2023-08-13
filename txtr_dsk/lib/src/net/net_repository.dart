@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 class NetRepository {

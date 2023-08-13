@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:txtr_dsk/src/services/phone_finder.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_model.dart';
-import 'package:txtr_dsk/src/settings/bloc/settings_service.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
+import 'package:txtr_dsk/src/views/settings/bloc/settings_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 part 'settings_event.dart';

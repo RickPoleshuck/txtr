@@ -5,3 +5,5 @@ txtr_dsk: pubspec.yaml
 	flutter build linux --release
 install: txtr_dsk
 	cp -r build/linux/x64/release/bundle/* ~/apps/sms
+snapcraft:
+	snapcraft --use-lxd --verbose

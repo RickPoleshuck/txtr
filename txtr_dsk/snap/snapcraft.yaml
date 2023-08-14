@@ -1,0 +1,28 @@
+name: txtr
+version: 1.0.0
+summary: Desktop SMS Application
+description: Secure desktop SMS application that connects to mobile phones
+
+confinement: strict
+base: core18
+grade: stable
+
+apps:
+  txtr:
+    command: bin/txtr_dsk
+    extensions: [flutter-master]
+    plugs:
+    - network
+    slots:
+      - dbus-txtr
+slots:
+  dbus-txtr: 
+    interface: dbus
+    bus: session
+    name: com.txtrapp.txtr 
+
+parts:
+  txtr:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart

@@ -43,3 +43,5 @@ pubspec.lock
 /web/index.html.bak
 
 Gemfile.lock
+
+*.snap

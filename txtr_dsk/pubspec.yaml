@@ -25,6 +25,8 @@ dependencies:
   network_tools: ^3.2.1
   shared_preferences: ^2.1.2
   txtr_shared:
+#    path: ../txtr_shared
+# Github required for building for snap, local path when making changes to shared
     git:
       url: https://github.com/RickPoleshuck/txtr.git
       path: txtr_shared

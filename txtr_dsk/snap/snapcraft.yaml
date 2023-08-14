@@ -7,19 +7,18 @@ confinement: strict
 base: core18
 grade: stable
 
+slots:
+  dbus-txtr:
+    interface: dbus
+    bus: session
+    name: com.txtrapp.txtr
+
 apps:
   txtr:
     command: bin/txtr_dsk
-    extensions: [flutter-master]
+    extensions: [flutter-stable]
     plugs:
     - network
-    slots:
-      - dbus-txtr
-slots:
-  dbus-txtr: 
-    interface: dbus
-    bus: session
-    name: com.txtrapp.txtr 
 
 parts:
   txtr:

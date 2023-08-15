@@ -12,7 +12,7 @@ void main() async {
   WindowOptions windowOptions = const WindowOptions(
     size: Size(800, 600),
     center: true,
-    title: 'TXTR Desktop',
+    title: 'TXTR',
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();

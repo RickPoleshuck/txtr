@@ -60,16 +60,6 @@ class RestServer {
       List<SmsMessage> messages = await Sms().query(
           count: 100); // @TODO - Maximum of 100 inbox and 100 sent messages
       List<TxtrMessageDTO> messageDTOs = [];
-      // for (final SmsMessage m in messages) {
-      //   messageDTOs.add(TxtrMessageDTO(
-      //       m.id!,
-      //       m.sender!,
-      //       _normalizePhoneNumber(m.address!),
-      //       m.date!,
-      //       m.body ?? '',
-      //       m.read!,
-      //       m.kind == SmsMessageKind.sent));
-      // }
       final String result = _messageToJson(messages);
       _lastMessageUpdate = DateTime.now();
       return Response.ok(result);

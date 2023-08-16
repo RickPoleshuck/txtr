@@ -60,16 +60,30 @@ class RestServer {
       List<SmsMessage> messages = await Sms().query(
           count: 100); // @TODO - Maximum of 100 inbox and 100 sent messages
       List<TxtrMessageDTO> messageDTOs = [];
-      for (final SmsMessage m in messages) {
-        messageDTOs.add(TxtrMessageDTO(m.id!, m.sender!, m.address!, m.date!,
-            m.body ?? '', m.read!, m.kind == SmsMessageKind.sent));
-      }
+      // for (final SmsMessage m in messages) {
+      //   messageDTOs.add(TxtrMessageDTO(
+      //       m.id!,
+      //       m.sender!,
+      //       _normalizePhoneNumber(m.address!),
+      //       m.date!,
+      //       m.body ?? '',
+      //       m.read!,
+      //       m.kind == SmsMessageKind.sent));
+      // }
       final String result = _messageToJson(messages);
       _lastMessageUpdate = DateTime.now();
       return Response.ok(result);
     } catch (e) {
       return Response.badRequest(body: e.toString());
     }
+  }
+
+  String _normalizePhoneNumber(final String number) {
+    // @TODO - allow other country codes other than +1
+    if (RegExp(r'^\d{10}$').hasMatch(number)) {
+      return '+1$number';
+    }
+    return number;
   }
 
   Future<Response> _getUpdates(final Request request) async {
@@ -174,9 +188,10 @@ class RestServer {
   String _messageToJson(final List<SmsMessage> messages) {
     final List<TxtrMessageDTO> messagesDto = [];
     for (final SmsMessage m in messages) {
+      final phone = _normalizePhoneNumber(m.address!);
       String name =
-          _contactService.getNameByPhoneNumber(m.address ?? 'unknown');
-      messagesDto.add(TxtrMessageDTO(m.id!, name, m.address!, m.date!,
+          _contactService.getNameByPhoneNumber(phone ?? 'unknown');
+      messagesDto.add(TxtrMessageDTO(m.id!, name, _normalizePhoneNumber(phone), m.date!,
           m.body ?? '', m.read!, m.kind == SmsMessageKind.sent));
     }
     return jsonEncode(messagesDto);

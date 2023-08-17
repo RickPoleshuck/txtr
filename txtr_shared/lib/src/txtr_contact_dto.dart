@@ -41,4 +41,9 @@ class TxtrContactDTO {
     'name': name,
     'phones': jsonEncode(phones),
   };
+
+  TxtrContactDTO.empty() :
+        id = '',
+        name = '',
+        phones = [];
 }

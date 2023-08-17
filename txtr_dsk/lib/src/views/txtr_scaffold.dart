@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:txtr_dsk/src/views/contacts/contacts_view.dart';
 import 'package:txtr_dsk/src/views/message/message_view.dart';
 import 'package:txtr_dsk/src/views/messages/bloc/messages_event.dart';
+import 'package:txtr_shared/txtr_shared.dart';
 
 class TxtrScaffold extends Scaffold {
   TxtrScaffold(
@@ -41,7 +42,7 @@ class _TxtrNavigationBar extends BottomNavigationBar {
           onTap: (index) {
             switch (index) {
               case 0:
-                context.push(MessageView.routeName);
+                context.push(MessageView.routeName, extra: TxtrContactDTO.empty());
                 break;
               case 1:
                 bloc.add(MessagesLoadEvent());

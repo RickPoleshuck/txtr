@@ -21,6 +21,11 @@ class TxtrPhoneDTO {
     'label': label,
     'isPrimary': isPrimary,
   };
+
+  TxtrPhoneDTO.empty() :
+    number = '',
+    label = '',
+    isPrimary = false;
 }
 
 class TxtrContactDTO {
@@ -45,5 +50,5 @@ class TxtrContactDTO {
   TxtrContactDTO.empty() :
         id = '',
         name = '',
-        phones = [];
+        phones = [TxtrPhoneDTO.empty()];
 }

@@ -13,3 +13,5 @@ clean:
 	flutter clean
 	snapcraft clean
 	flutter packages upgrade
+windows:
+	iscc windows\txtr.iss

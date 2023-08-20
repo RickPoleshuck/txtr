@@ -50,7 +50,6 @@ class ContactsView extends StatelessWidget with WindowListener {
       create: (context) => _contactsBloc,
       child: BlocBuilder<ContactsBloc, ContactsState>(
         builder: (context, state) {
-          late ScrollablePositionedList list;
           ItemScrollController itemScrollController = ItemScrollController();
           return TxtrScaffold(
             bloc: _contactsBloc,
@@ -63,7 +62,7 @@ class ContactsView extends StatelessWidget with WindowListener {
                     child: FormBuilderTextField(
                       name: 'search',
                       onChanged: (value) {
-                        debugPrint('onchanged');
+                        debugPrint('onchanged($value)');
                         if (value != null && state is ContactsLoadedState) {
                           int index = state.contacts.indexWhere((c) => c.name
                               .toLowerCase()
@@ -87,7 +86,7 @@ class ContactsView extends StatelessWidget with WindowListener {
               ContactsLoadingState() => const Center(
                   child: CircularProgressIndicator(),
                 ),
-              ContactsLoadedState() => list = ScrollablePositionedList.builder(
+              ContactsLoadedState() => ScrollablePositionedList.builder(
                   itemCount: state.contacts.length,
                   itemScrollController: itemScrollController,
                   itemBuilder: (context, index) {

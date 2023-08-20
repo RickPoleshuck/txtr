@@ -1,4 +1,4 @@
-import 'package:txtr_dsk/src/net/net_repository.dart';
+import 'package:txtr_dsk/src/services/net_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
 class ContactService {
@@ -6,7 +6,7 @@ class ContactService {
   static final DateTime _epoch =
       DateTime(1969); // client epoch should be before server epoch
   DateTime _lastUpdate = _epoch;
-  final NetRepository _netRepository = NetRepository();
+  final NetService _netRepository = NetService();
   static final ContactService _singleton = ContactService._internal();
 
   factory ContactService() {

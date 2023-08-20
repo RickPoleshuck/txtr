@@ -16,6 +16,15 @@ class MessageSendEvent extends MessageEvent {
   List<Object?> get props => [message];
 }
 
+class MessageErrorEvent extends MessageEvent {
+  final String errorMessage;
+
+  const MessageErrorEvent(this.errorMessage);
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
 class MessageLoadedEvent extends MessageEvent {
   final TxtrMessageDTO message;
   final BuildContext context;

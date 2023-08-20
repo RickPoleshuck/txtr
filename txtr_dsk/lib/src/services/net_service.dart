@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
@@ -9,10 +10,10 @@ import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
 import 'package:txtr_dsk/src/views/settings/bloc/settings_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 
-class NetRepository {
+class NetService {
   final Dio _dio;
 
-  NetRepository() : _dio = Dio() {
+  NetService() : _dio = Dio() {
     (_dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () =>
         HttpClient()
           ..badCertificateCallback =
@@ -117,18 +118,23 @@ class NetRepository {
     }
   }
 
-  Future<void> postMessage(final TxtrMessageDTO message) async {
+  Future<void> postMessage(final TxtrMessageDTO message, {int retry = 0}) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
         'https://${settings.phone.ip}:${TxtrShared.restPort}/api/message';
-    Response response = await _dio.post(url,
-        data: jsonEncode(message),
-        queryParameters: {'idToken': SettingsService.idToken});
-    if (response.statusCode == 200) {
-      return;
-    } else {
-      debugPrint('getMessages(): $response');
-      throw Exception(response.statusMessage);
+    try {
+      await _dio.post(url,
+          data: jsonEncode(message),
+          queryParameters: {'idToken': SettingsService.idToken});
+    } on TimeoutException catch (e) {
+      if (retry < 3)  {
+        debugPrint('postMessage() retrying');
+        return postMessage(message, retry: retry + 1);
+      }
+      rethrow;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
     }
   }
 }

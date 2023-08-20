@@ -5,7 +5,7 @@ import 'package:txtr_shared/txtr_shared.dart';
 @immutable
 sealed class MessageState extends Equatable {}
 
-class MessageSendingEvent extends MessageState {
+class MessageSendingState extends MessageState {
   @override
   List<Object?> get props => [];
 }
@@ -17,6 +17,11 @@ class MessageLoadedState extends MessageState {
 
   @override
   List<Object?> get props => [message];
+}
+
+class MessageSentState extends MessageState {
+  @override
+  List<Object?> get props => [];
 }
 
 class MessageErrorState extends MessageState {

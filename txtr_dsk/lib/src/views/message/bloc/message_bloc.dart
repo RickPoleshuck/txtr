@@ -14,6 +14,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       emit(MessageSendingState());
       try {
         await _netRepository.postMessage(event.message);
+        emit(MessageSentState());
       } catch (e) {
         if (e is DioException && e.response!.statusCode! == 404) {
           add(MessageErrorEvent(e.message ?? 'not found'));

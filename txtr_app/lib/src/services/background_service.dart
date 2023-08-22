@@ -37,7 +37,7 @@ class BackgroundService {
           autoStart: true,
           isForegroundMode: true,
           notificationChannelId: Globals.notificationChannelId,
-          initialNotificationTitle: 'SMS Service',
+          initialNotificationTitle: 'Txtr Service',
           initialNotificationContent: 'Listening',
           foregroundServiceNotificationId: Globals.notificationId,
         ),

@@ -82,8 +82,7 @@ class MessageView extends StatelessWidget {
                           FormBuilderTextField(
                             name: 'body',
                             maxLines: 6,
-                            validator: FormBuilderValidators.match('^.{1,}\$\$',
-                                errorText: 'Cannot be empty'),
+                            validator: FormBuilderValidators.required(),
                             decoration: const TxtrInputDecoration('Message'),
                           ),
                           Row(

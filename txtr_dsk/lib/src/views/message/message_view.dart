@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -79,11 +80,25 @@ class MessageView extends StatelessWidget {
                             decoration: const TxtrInputDecoration('Address'),
                             initialValue: contact.phones[0].number,
                           ),
-                          FormBuilderTextField(
-                            name: 'body',
-                            maxLines: 6,
-                            validator: FormBuilderValidators.required(),
-                            decoration: const TxtrInputDecoration('Message'),
+                          CallbackShortcuts(
+                            bindings: <ShortcutActivator, VoidCallback>{
+                              const SingleActivator(LogicalKeyboardKey.enter, control: true): () {
+                                _formKey.currentState!.save();
+                                if (_formKey.currentState!.isValid) {
+                                  final formData = _formKey.currentState!
+                                      .value;
+                                  context.read<MessageBloc>().add(
+                                      MessageSendEvent(
+                                          TxtrMessageDTO.fromJson(formData)));
+                                }
+                              },
+                            },
+                            child: FormBuilderTextField(
+                              name: 'body',
+                              maxLines: 6,
+                              validator: FormBuilderValidators.required(),
+                              decoration: const TxtrInputDecoration('Message'),
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

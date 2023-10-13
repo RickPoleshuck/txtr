@@ -7,7 +7,6 @@ import 'package:txtr_app/src/services/preference_service.dart';
 import 'package:txtr_app/src/settings/bloc/settings_model.dart';
 
 class SettingsService {
-  static final Dio _dio = getDio();
 
   static const String settingsKey = 'settings';
 

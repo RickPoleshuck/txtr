@@ -78,6 +78,7 @@ class PhoneFinder {
     final String subnet = myIp.substring(0, myIp.lastIndexOf('.'));
     phones.clear();
     HostScanner.scanDevicesForSinglePort(subnet, TxtrShared.restPort,
+            timeout: const Duration(milliseconds: 500),
             progressCallback: (progress) {
       debugPrint('Progress for host discovery : $progress');
     }, resultsInAddressAscendingOrder: true)

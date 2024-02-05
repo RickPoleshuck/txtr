@@ -13,7 +13,7 @@ import 'package:txtr_shared/txtr_shared.dart';
 class NetService {
   final Dio _dio;
 
-  NetService() : _dio = Dio() {
+  NetService() : _dio = Dio(BaseOptions(connectTimeout: Duration(milliseconds: 500))) {
     (_dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () =>
         HttpClient()
           ..badCertificateCallback =

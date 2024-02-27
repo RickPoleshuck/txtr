@@ -1,6 +1,6 @@
 # txtr_dsk
 
-txtr client
+Desktop Txting App
 
 ## Getting Started
 

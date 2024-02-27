@@ -8,7 +8,7 @@
 PRODUCT_NAME = txtr_dsk
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.txtrDsk
+PRODUCT_BUNDLE_IDENTIFIER = com.txtrapp.dsk.txtrDsk
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.txtrapp.dsk. All rights reserved.

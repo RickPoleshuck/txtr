@@ -7,11 +7,9 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('UDP', () {
-    test('Find Phone', () async {
-      // Globals.initSharedPreferences();
-      // final String? ip = await PhoneFinder().findHosts();
-      // expect(ip, '192.168.1.235');
+  group('Plus Operator', () {
+    test('should add two numbers together', () {
+      expect(1 + 1, 2);
     });
   });
 }

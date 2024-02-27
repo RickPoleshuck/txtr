@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Txtr
-Comment=Secure desktop SMS application that connects to mobile phones
-Exec=txtr
-Icon=${SNAP}/meta/gui/txtr_icon.png
-Terminal=false
-Type=Application
-Categories=Utility

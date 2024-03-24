@@ -8,4 +8,6 @@ class Globals {
   }
 
   static SharedPreferences get prefs => _prefs;
+  static Duration receiveTimeout = const Duration(milliseconds: 3000);
+  static Duration connectTimeout = const Duration(milliseconds: 2000);
 }

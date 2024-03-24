@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:txtr_dsk/src/globals.dart';
 import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
 import 'package:txtr_dsk/src/views/settings/bloc/settings_service.dart';
 import 'package:txtr_shared/txtr_shared.dart';
@@ -90,12 +91,13 @@ class NetService {
     }
   }
 
-  Future<PhoneDTO> getPhone(final String host) async {
+  Future<PhoneDTO> getPhone(final String host, {Duration? timeout}) async {
     if (host.isEmpty) {
       throw Exception('No phone ip');
     }
     final String url = 'https://$host:${TxtrShared.restPort}/api/phone';
-    Response response = await _dio.get(url);
+    final Options options = Options(receiveTimeout: timeout ?? Globals.receiveTimeout);
+    Response response = await _dio.get(url, options: options);
     if (response.statusCode == 200) {
       return PhoneDTO.fromJson(jsonDecode(response.data));
     } else {

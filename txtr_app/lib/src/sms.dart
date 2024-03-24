@@ -20,7 +20,7 @@ class Sms {
   }
 
   Future<void> send(final TxtrMessageDTO message) async {
-    String result = await sendSMS(message: message.body, recipients: [message.address], sendType: 'background')
+    String result = await sendSMS(message: message.body, recipients: [message.address], sendDirect: true)
         .catchError((e) {
       debugPrint(e);
       return e.toString();

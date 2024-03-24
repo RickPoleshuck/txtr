@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_router/shelf_router.dart';
@@ -16,7 +17,6 @@ import 'package:txtr_app/src/settings/bloc/settings_service.dart';
 import 'package:txtr_app/src/sms.dart';
 import 'package:txtr_shared/txtr_shared.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
 class RestServer {
   final ContactService _contactService = ContactService();
@@ -137,7 +137,7 @@ class RestServer {
     } else {
       return Response.badRequest(body: 'Not a phone');
     }
-    final ip = await WifiInfo().getWifiIP() ?? '';
+    final ip = await NetworkInfo().getWifiIP() ?? '';
     PhoneDTO phoneDTO = PhoneDTO(ip, phoneName, model);
     return Response.ok(jsonEncode(phoneDTO));
   }

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:network_tools/network_tools.dart';
+import 'package:txtr_dsk/src/globals.dart';
 import 'package:txtr_dsk/src/services/net_service.dart';
 import 'package:txtr_dsk/src/views/settings/bloc/settings_model.dart';
 import 'package:txtr_dsk/src/views/settings/bloc/settings_service.dart';
@@ -15,7 +17,9 @@ class PhoneFinder {
 
   Future<bool> checkPreviousPhone() async {
     final SettingsModel settings = SettingsService.load();
+
     try {
+      if (_isLocalhost(settings.phone.ip)) throw Exception('localhost');
       final PhoneDTO phone = await _netRepository.getPhone(settings.phone.ip);
       return phone.name == settings.phone.name;
     } catch (_) {
@@ -30,6 +34,11 @@ class PhoneFinder {
       }
       return false;
     }
+  }
+
+  bool _isLocalhost(final String ipAddress) {
+    var address = InternetAddress(ipAddress);
+    return address.isLoopback;
   }
 
   Future<PhoneDTO> getPhoneByName(final String phoneName) async {
@@ -78,7 +87,7 @@ class PhoneFinder {
     final String subnet = myIp.substring(0, myIp.lastIndexOf('.'));
     phones.clear();
     HostScanner.scanDevicesForSinglePort(subnet, TxtrShared.restPort,
-            timeout: const Duration(milliseconds: 500),
+            timeout: Globals.connectTimeout,
             progressCallback: (progress) {
       debugPrint('Progress for host discovery : $progress');
     }, resultsInAddressAscendingOrder: true)
@@ -90,6 +99,9 @@ class PhoneFinder {
         completer.complete(phones);
         debugPrint('Scan completed');
       },
+      onError: (e) {
+        debugPrint('error: $e');
+      }
     );
     return await completer.future;
   }

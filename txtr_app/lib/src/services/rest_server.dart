@@ -36,6 +36,7 @@ class RestServer {
     app.get('/api/updates', _getUpdates);
     app.post('/api/message', _postMessage);
     _contactService.refresh();
+    debugPrint('IP=${await NetworkInfo().getWifiIP() ?? ''}');
     final securityContext = await _getSecurityContext();
     await io.serve(app, InternetAddress.anyIPv4, TxtrShared.restPort,
         securityContext: securityContext);

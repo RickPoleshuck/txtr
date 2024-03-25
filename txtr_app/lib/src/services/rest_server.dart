@@ -23,22 +23,29 @@ class RestServer {
   static const idTokenKey = 'idToken';
   static const loginKey = 'login';
   static const passwdKey = 'passwd';
-  static const String settingsKey = 'settings';
   static final DateTime _epoch = DateTime(1970);
   DateTime _lastMessageUpdate = _epoch;
+  final Router router = Router();
+  late SecurityContext securityContext;
 
   Future<void> start() async {
-    final Router app = Router();
-    app.get('/api/messages', _getMessages);
-    app.get('/api/contacts', _getContacts);
-    app.post('/api/login', _postLogin);
-    app.get('/api/phone', _getPhone);
-    app.get('/api/updates', _getUpdates);
-    app.post('/api/message', _postMessage);
+    router.get('/api/messages', _getMessages);
+    router.get('/api/contacts', _getContacts);
+    router.post('/api/login', _postLogin);
+    router.get('/api/phone', _getPhone);
+    router.get('/api/updates', _getUpdates);
+    router.post('/api/message', _postMessage);
     _contactService.refresh();
     debugPrint('IP=${await NetworkInfo().getWifiIP() ?? ''}');
-    final securityContext = await _getSecurityContext();
-    await io.serve(app, InternetAddress.anyIPv4, TxtrShared.restPort,
+    securityContext = await _getSecurityContext();
+    final SettingsModel settings = await SettingsService.load();
+    await io.serve(router, InternetAddress.anyIPv4, settings.port,
+        securityContext: securityContext);
+  }
+
+  Future<void> restart() async {
+    final SettingsModel settings = await SettingsService.load();
+    await io.serve(router, InternetAddress.anyIPv4, settings.port,
         securityContext: securityContext);
   }
 
@@ -50,6 +57,14 @@ class RestServer {
     final idToken = await PreferenceService().get(idTokenKey);
     return paramToken == idToken;
   }
+
+  static final RestServer _singleton = RestServer._internal();
+
+  factory RestServer() {
+    return _singleton;
+  }
+
+  RestServer._internal();
 
   Future<Response> _getMessages(final Request request) async {
     debugPrint('_getMessages');
@@ -122,10 +137,7 @@ class RestServer {
 
   Future<Response> _getPhone(final Request request) async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    final String? rawSettings = await PreferenceService().get(settingsKey);
-    final SettingsModel settings = rawSettings == null
-        ? SettingsModel.empty()
-        : SettingsModel.fromJson(jsonDecode(rawSettings));
+    final SettingsModel settings = await PreferenceService().getSettings();
     final phoneName = settings.phoneName;
 
     late String model;
@@ -180,10 +192,9 @@ class RestServer {
     final List<TxtrMessageDTO> messagesDto = [];
     for (final SmsMessage m in messages) {
       final phone = _normalizePhoneNumber(m.address!);
-      String name =
-          _contactService.getNameByPhoneNumber(phone ?? 'unknown');
-      messagesDto.add(TxtrMessageDTO(m.id!, name, _normalizePhoneNumber(phone), m.date!,
-          m.body ?? '', m.read!, m.kind == SmsMessageKind.sent));
+      String name = _contactService.getNameByPhoneNumber(phone ?? 'unknown');
+      messagesDto.add(TxtrMessageDTO(m.id!, name, _normalizePhoneNumber(phone),
+          m.date!, m.body ?? '', m.read!, m.kind == SmsMessageKind.sent));
     }
     return jsonEncode(messagesDto);
   }

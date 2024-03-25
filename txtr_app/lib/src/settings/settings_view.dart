@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:txtr_app/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_app/src/settings/bloc/settings_model.dart';
+import 'package:txtr_shared/txtr_shared.dart';
 
 class SettingsView extends StatelessWidget {
   SettingsView({super.key});
@@ -57,6 +58,14 @@ class SettingsView extends StatelessWidget {
                           decoration: const SmsInputDecoration('Password'),
                           initialValue: state.settings.passwd,
                         ),
+                        FormBuilderTextField(
+                          name: 'port',
+                          keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+                          validator: FormBuilderValidators.match('^\\d{4,5}\$',
+                              errorText: 'Requires 4 or 5 digits'),
+                          decoration: const SmsInputDecoration('Port'),
+                          initialValue: '${state.settings.port ?? TxtrShared.defRestPort}',
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -66,7 +75,7 @@ class SettingsView extends StatelessWidget {
                                   final formData = _formKey.currentState!.value;
                                   context.read<SettingsBloc>().add(
                                       SettingsSaveEvent(
-                                          SettingsModel.fromJson(formData)));
+                                          SettingsModel.fromFormJson(formData)));
                                   Navigator.pop(context);
                                 },
                                 child: const Text('Save')),

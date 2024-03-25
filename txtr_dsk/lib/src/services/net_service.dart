@@ -128,6 +128,7 @@ class NetService {
       await _dio.post(url,
           data: jsonEncode(message),
           queryParameters: {'idToken': SettingsService.idToken});
+      debugPrint('Sent message to: ${message.address}');
     } on TimeoutException catch (e) {
       if (retry < 3)  {
         debugPrint('postMessage() retrying');

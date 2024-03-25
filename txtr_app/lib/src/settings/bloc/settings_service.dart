@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:txtr_app/src/services/preference_service.dart';
+import 'package:txtr_app/src/services/rest_server.dart';
 import 'package:txtr_app/src/settings/bloc/settings_model.dart';
 
 class SettingsService {
@@ -11,6 +12,10 @@ class SettingsService {
   static const String settingsKey = 'settings';
 
   static Future<void> save(final SettingsModel settings) async {
+    final SettingsModel previous = await load();
+    if (previous.port != settings.port) {
+      RestServer().restart();
+    }
     await savePref(settingsKey, jsonEncode(settings.toJson()));
   }
 

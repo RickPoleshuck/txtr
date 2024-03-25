@@ -1,3 +1,3 @@
 class TxtrShared {
-  static const int restPort = 3956;
+  static const int defRestPort = 3956;
 }

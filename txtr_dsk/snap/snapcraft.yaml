@@ -2,9 +2,12 @@ name: txtr
 version: '1.0.0'
 summary: Desktop SMS Application
 description: Secure desktop SMS application that connects to mobile phones
+#
+# sudo snap install ./txtr_1.0.0_amd64.snap  --dangerous --devmode
+#
 
 base: core22
-confinement: strict
+confinement: devmode
 grade: stable
 
 apps:

@@ -183,9 +183,9 @@ class RestServer {
     final String query = await request.readAsString();
     Map<String, dynamic> queryParams = jsonDecode(query);
     final TxtrMessageDTO message = TxtrMessageDTO.fromJson(queryParams);
-    Sms().send(message);
+    final String result = await Sms().send(message);
 
-    return Response.ok(null);
+    return Response.ok(result);
   }
 
   String _messageToJson(final List<SmsMessage> messages) {

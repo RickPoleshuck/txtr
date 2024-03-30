@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:txtr_app/src/settings/bloc/settings_bloc.dart';
 import 'package:txtr_app/src/settings/bloc/settings_model.dart';
 import 'package:txtr_shared/txtr_shared.dart';
@@ -22,74 +23,90 @@ class SettingsView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: BlocProvider(
-          create: (_) => SettingsBloc()..add(SettingsLoadEvent()),
+          create: (_) =>
+          SettingsBloc()
+            ..add(SettingsLoadEvent()),
           child: BlocBuilder<SettingsBloc, SettingsState>(
               builder: (context, state) {
-            switch (state) {
-              case SettingsLoading():
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              case SettingsLoaded():
-                return FormBuilder(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [
-                        FormBuilderTextField(
-                          name: 'phoneName',
-                          validator: FormBuilderValidators.match('^.{4,}\$',
-                              errorText: 'Requires at least 4 characters'),
-                          decoration: const SmsInputDecoration('Phone Name'),
-                          initialValue: state.settings.phoneName,
-                        ),
-                        FormBuilderTextField(
-                          name: 'login',
-                          validator: FormBuilderValidators.match('^.{4,}\$',
-                              errorText: 'Requires at least 4 characters'),
-                          decoration: const SmsInputDecoration('Login'),
-                          initialValue: state.settings.login,
-                        ),
-                        FormBuilderTextField(
-                          name: 'passwd',
-                          obscureText: true,
-                          validator: FormBuilderValidators.match('^.{8,}\$',
-                              errorText: 'Requires at least 8 characters'),
-                          decoration: const SmsInputDecoration('Password'),
-                          initialValue: state.settings.passwd,
-                        ),
-                        FormBuilderTextField(
-                          name: 'port',
-                          keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
-                          validator: FormBuilderValidators.match('^\\d{4,5}\$',
-                              errorText: 'Requires 4 or 5 digits'),
-                          decoration: const SmsInputDecoration('Port'),
-                          initialValue: '${state.settings.port ?? TxtrShared.defRestPort}',
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                switch (state) {
+                  case SettingsLoading():
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  case SettingsLoaded():
+                    return FormBuilder(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
                           children: [
-                            ElevatedButton(
-                                onPressed: () {
-                                  _formKey.currentState!.save();
-                                  final formData = _formKey.currentState!.value;
-                                  context.read<SettingsBloc>().add(
-                                      SettingsSaveEvent(
-                                          SettingsModel.fromFormJson(formData)));
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Save')),
-                            ElevatedButton(
-                                onPressed: () {
-                                  _formKey.currentState!.reset();
-                                },
-                                child: const Text('Reset')),
+                            FormBuilderTextField(
+                              name: 'phoneName',
+                              validator: FormBuilderValidators.match('^.{4,}\$',
+                                  errorText: 'Requires at least 4 characters'),
+                              decoration: const SmsInputDecoration(
+                                  'Phone Name'),
+                              initialValue: state.settings.phoneName,
+                            ),
+                            FormBuilderTextField(
+                              name: 'login',
+                              validator: FormBuilderValidators.match('^.{4,}\$',
+                                  errorText: 'Requires at least 4 characters'),
+                              decoration: const SmsInputDecoration('Login'),
+                              initialValue: state.settings.login,
+                            ),
+                            FormBuilderTextField(
+                              name: 'passwd',
+                              obscureText: true,
+                              validator: FormBuilderValidators.match('^.{8,}\$',
+                                  errorText: 'Requires at least 8 characters'),
+                              decoration: const SmsInputDecoration('Password'),
+                              initialValue: state.settings.passwd,
+                            ),
+                            FormBuilderTextField(
+                              name: 'ip',
+                              readOnly: true,
+                              decoration: const SmsInputDecoration('IP'),
+                              initialValue: state.ip,
+                            ),
+                            FormBuilderTextField(
+                              name: 'port',
+                              keyboardType: const TextInputType
+                                  .numberWithOptions(
+                                  signed: false, decimal: false),
+                              validator: FormBuilderValidators.match(
+                                  '^\\d{4,5}\$',
+                                  errorText: 'Requires 4 or 5 digits'),
+                              decoration: const SmsInputDecoration('Port'),
+                              initialValue:
+                              '${state.settings.port ??
+                                  TxtrShared.defRestPort}',
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      _formKey.currentState!.save();
+                                      final formData = _formKey.currentState!
+                                          .value;
+                                      context.read<SettingsBloc>().add(
+                                          SettingsSaveEvent(
+                                              SettingsModel.fromFormJson(
+                                                  formData)));
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Save')),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      _formKey.currentState!.reset();
+                                    },
+                                    child: const Text('Reset')),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ));
-            }
-          }),
+                        ));
+                }
+              }),
         ),
       ),
     );
@@ -99,15 +116,15 @@ class SettingsView extends StatelessWidget {
 class SmsInputDecoration extends InputDecoration {
   const SmsInputDecoration(String hintText)
       : super(
-          hintText: hintText,
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.greenAccent, width: 3.0),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blueAccent, width: 3.0),
-          ),
-          errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red, width: 3.0),
-          ),
-        );
+    hintText: hintText,
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.greenAccent, width: 3.0),
+    ),
+    enabledBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.blueAccent, width: 3.0),
+    ),
+    errorBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red, width: 3.0),
+    ),
+  );
 }

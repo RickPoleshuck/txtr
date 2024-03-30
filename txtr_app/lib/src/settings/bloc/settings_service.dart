@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:txtr_app/src/services/preference_service.dart';
 import 'package:txtr_app/src/services/rest_server.dart';
 import 'package:txtr_app/src/settings/bloc/settings_model.dart';
@@ -24,9 +25,10 @@ class SettingsService {
   }
   static Future<SettingsModel> load() async {
     final rawSettings = await loadPref(settingsKey);
-    return rawSettings == null || rawSettings.isEmpty
+    final settings = rawSettings == null || rawSettings.isEmpty
         ? SettingsModel.empty()
         : SettingsModel.fromJson(jsonDecode(rawSettings));
+    return settings;
   }
 
   static Future<void> savePref(final String key, final String value) async {

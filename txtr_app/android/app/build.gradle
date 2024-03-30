@@ -26,6 +26,7 @@ android {
     namespace "com.example.txtr_app"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    ext.kotlin_version = '1.6.0'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

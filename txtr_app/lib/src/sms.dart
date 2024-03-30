@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:txtr_shared/txtr_shared.dart';
@@ -19,12 +18,12 @@ class Sms {
     return messages;
   }
 
-  Future<void> send(final TxtrMessageDTO message) async {
-    String result = await sendSMS(message: message.body, recipients: [message.address], sendDirect: true)
-        .catchError((e) {
-      debugPrint(e);
+  Future<String> send(final TxtrMessageDTO message) async {
+    String result =
+        await sendSMS(message: message.body, recipients: [message.address])
+            .catchError((e) {
       return e.toString();
     });
-    debugPrint(result);
+    return result;
   }
 }

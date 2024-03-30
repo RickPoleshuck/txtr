@@ -67,6 +67,12 @@ class SettingsView extends StatelessWidget {
                           decoration: const TxtrInputDecoration('Password'),
                           initialValue: state.settings.passwd,
                         ),
+                        FormBuilderTextField(
+                          name: 'port',
+                          validator: FormBuilderValidators.integer(),
+                          decoration: const TxtrInputDecoration('Port'),
+                          initialValue: '${state.settings.port}',
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -105,8 +111,13 @@ class SettingsView extends StatelessWidget {
       final Map formData, final List<PhoneDTO> phones) {
     final String ip = formData['phoneIp'];
     PhoneDTO phone = phones.firstWhere((p) => p.ip == ip);
-    SettingsModel settings =
-        SettingsModel(formData['login'], formData['passwd'], phone, '');
+    SettingsModel settings = SettingsModel(
+      formData['login'],
+      formData['passwd'],
+      phone,
+      '',
+      int.tryParse(formData['ip']) ?? TxtrShared.restPort,
+    );
     return settings;
   }
 }

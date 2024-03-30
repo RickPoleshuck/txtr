@@ -11,9 +11,10 @@ class SettingsLoading extends SettingsState {
 
 class SettingsLoaded extends SettingsState {
   final SettingsModel settings;
+  final String ip;
 
   @override
   List<Object> get props => [settings];
 
-  const SettingsLoaded(this.settings);
+  const SettingsLoaded(this.settings, this.ip);
 }

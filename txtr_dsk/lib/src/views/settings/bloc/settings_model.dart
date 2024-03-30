@@ -7,8 +7,9 @@ class SettingsModel {
   final String passwd;
   PhoneDTO phone;
   final String idToken;
+  final int port;
 
-  SettingsModel(this.login, this.passwd, this.phone, this.idToken);
+  SettingsModel(this.login, this.passwd, this.phone, this.idToken, this.port);
 
   SettingsModel.fromJson(Map<String, dynamic> json)
       : login = json['login'],
@@ -16,18 +17,30 @@ class SettingsModel {
         phone = json['phone'] != null
             ? PhoneDTO.fromJson(jsonDecode(json['phone']))
             : PhoneDTO.empty(),
-        idToken = json['idToken'] ?? '';
+        idToken = json['idToken'] ?? '',
+        port = json['port'] ?? TxtrShared.restPort;
+
+  SettingsModel.fromFormJson(Map<String, dynamic> json)
+      : login = json['login'],
+        passwd = json['passwd'],
+        phone = json['phone'] != null
+            ? PhoneDTO.fromJson(jsonDecode(json['phone']))
+            : PhoneDTO.empty(),
+        idToken = json['idToken'] ?? '',
+        port = int.tryParse(json['port']) ?? TxtrShared.restPort;
 
   Map<String, dynamic> toJson() => {
         'login': login,
         'passwd': passwd,
         'phone': jsonEncode(phone),
         'idToken': idToken,
+        'port': port
       };
 
   SettingsModel.empty()
       : login = '',
         passwd = '',
         phone = PhoneDTO.empty(),
-        idToken = '';
+        idToken = '',
+        port = TxtrShared.restPort;
 }

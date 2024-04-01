@@ -51,15 +51,10 @@ class _SmsViewState extends State<SmsView> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            var permission = await Permission.sms.status;
-            if (permission.isGranted) {
-              final messages = await Sms().query(count: 100);
-              debugPrint('sms inbox messages: ${messages.length}');
+            final messages = await Sms().query(count: 100);
+            debugPrint('sms inbox messages: ${messages.length}');
 
-              setState(() => _messages = messages);
-            } else {
-              await Permission.sms.request();
-            }
+            setState(() => _messages = messages);
           },
           child: const Icon(Icons.refresh),
         ),

@@ -25,28 +25,32 @@ class RestServer {
   static const passwdKey = 'passwd';
   static final DateTime _epoch = DateTime(1970);
   DateTime _lastMessageUpdate = _epoch;
-  final Router router = Router();
-  late SecurityContext securityContext;
+  final Router _router = Router();
+  SecurityContext? _securityContext;
+  HttpServer? _httpServer;
 
   Future<void> start() async {
-    router.get('/api/messages', _getMessages);
-    router.get('/api/contacts', _getContacts);
-    router.post('/api/login', _postLogin);
-    router.get('/api/phone', _getPhone);
-    router.get('/api/updates', _getUpdates);
-    router.post('/api/message', _postMessage);
+    _router.get('/api/messages', _getMessages);
+    _router.get('/api/contacts', _getContacts);
+    _router.post('/api/login', _postLogin);
+    _router.get('/api/phone', _getPhone);
+    _router.get('/api/updates', _getUpdates);
+    _router.post('/api/message', _postMessage);
     _contactService.refresh();
     debugPrint('IP=${await NetworkInfo().getWifiIP() ?? ''}');
-    securityContext = await _getSecurityContext();
+    _securityContext = await _getSecurityContext();
     final SettingsModel settings = await SettingsService.load();
-    await io.serve(router, InternetAddress.anyIPv4, settings.port,
-        securityContext: securityContext);
+    _httpServer = await io.serve(_router, InternetAddress.anyIPv4, settings.port,
+        securityContext: _securityContext);
+    debugPrint(
+        'Starting listening for ReST requests: ${_httpServer!.address}:${_httpServer!.port}');
   }
 
   Future<void> restart() async {
-    final SettingsModel settings = await SettingsService.load();
-    await io.serve(router, InternetAddress.anyIPv4, settings.port,
-        securityContext: securityContext);
+    if (_httpServer != null) {
+      _httpServer!.close(force: true);
+    }
+    start();
   }
 
   Future<bool> _checkToken(final Request request) async {

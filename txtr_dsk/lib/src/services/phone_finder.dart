@@ -107,6 +107,6 @@ class PhoneFinder {
   }
 
   Future<PhoneDTO> _getPhone(final String ip) async {
-    return await _netRepository.getPhone(ip);
+    return await _netRepository.getPhone(ip, timeout: const Duration(milliseconds: 2000));
   }
 }

@@ -27,7 +27,7 @@ class RestServer {
   DateTime _lastMessageUpdate = _epoch;
   final Router _router = Router();
   SecurityContext? _securityContext;
-  HttpServer? _httpServer;
+  late HttpServer _httpServer;
 
   Future<void> start() async {
     _router.get('/api/messages', _getMessages);
@@ -40,10 +40,9 @@ class RestServer {
     debugPrint('IP=${await NetworkInfo().getWifiIP() ?? ''}');
     _securityContext = await _getSecurityContext();
     final SettingsModel settings = await SettingsService.load();
-    _httpServer = await io.serve(_router, InternetAddress.anyIPv4, settings.port,
+    _httpServer = await io.serve(
+        _router, InternetAddress.anyIPv4, settings.port,
         securityContext: _securityContext);
-    debugPrint(
-        'Starting listening for ReST requests: ${_httpServer!.address}:${_httpServer!.port}');
   }
 
   Future<void> restart() async {
@@ -225,5 +224,9 @@ class RestServer {
     return SecurityContext()
       ..useCertificateChainBytes(certBytes.buffer.asInt8List())
       ..usePrivateKeyBytes(keyBytes.buffer.asInt8List());
+  }
+
+  Future<String> getUrl() async {
+    return 'https://${await NetworkInfo().getWifiIP() ?? 'NoWIFI'}:${_httpServer.port}';
   }
 }

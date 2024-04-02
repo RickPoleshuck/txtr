@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:txtr_app/src/globals.dart';
 import 'package:txtr_app/src/services/rest_server.dart';
 
+@pragma('vm:entry-point')
 dynamic listen(final ServiceInstance serviceInstance) async {
   await RestServer().start();
   debugPrint('Started listening for ReST requests');
@@ -17,7 +18,7 @@ class BackgroundService {
     final service = FlutterBackgroundService();
     final AndroidNotificationChannel channel = AndroidNotificationChannel(
       Globals.notificationChannelId,
-      'SMS Service',
+      'TXTR Service',
       description: 'This channel is used to report attached clients.',
       // description
       importance: Importance.low,
@@ -37,7 +38,7 @@ class BackgroundService {
           autoStart: true,
           isForegroundMode: true,
           notificationChannelId: Globals.notificationChannelId,
-          initialNotificationTitle: 'Txtr Service',
+          initialNotificationTitle: 'TXTR Service',
           initialNotificationContent: 'Listening',
           foregroundServiceNotificationId: Globals.notificationId,
         ),

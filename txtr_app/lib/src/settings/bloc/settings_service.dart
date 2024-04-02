@@ -13,10 +13,6 @@ class SettingsService {
   static const String settingsKey = 'settings';
 
   static Future<void> save(final SettingsModel settings) async {
-    final SettingsModel previous = await load();
-    if (previous.port != settings.port) {
-      RestServer().restart();
-    }
     await savePref(settingsKey, jsonEncode(settings.toJson()));
   }
 

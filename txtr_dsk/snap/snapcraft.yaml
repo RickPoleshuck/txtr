@@ -3,11 +3,11 @@ version: '1.0.0'
 summary: Desktop SMS Application
 description: Secure desktop SMS application that connects to mobile phones
 #
-# sudo snap install ./txtr_1.0.0_amd64.snap  --dangerous --devmode
+# sudo snap install ./txtr_1.0.0_amd64.snap  --dangerous
 #
 
 base: core22
-confinement: devmode
+confinement: strict
 grade: stable
 
 apps:
@@ -21,4 +21,5 @@ parts:
   txtr:
     source: .
     plugin: flutter
+    flutter-channel: stable
     flutter-target: lib/main.dart

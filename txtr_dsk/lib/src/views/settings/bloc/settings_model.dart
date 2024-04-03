@@ -18,7 +18,7 @@ class SettingsModel {
             ? PhoneDTO.fromJson(jsonDecode(json['phone']))
             : PhoneDTO.empty(),
         idToken = json['idToken'] ?? '',
-        port = json['port'] ?? TxtrShared.restPort;
+        port = json['port'] ?? TxtrShared.defRestPort;
 
   SettingsModel.fromFormJson(Map<String, dynamic> json)
       : login = json['login'],

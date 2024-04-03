@@ -14,7 +14,7 @@ import 'package:txtr_shared/txtr_shared.dart';
 class NetService {
   final Dio _dio;
 
-  NetService() : _dio = Dio(BaseOptions(connectTimeout: Duration(milliseconds: 1000))) {
+  NetService() : _dio = Dio(BaseOptions(connectTimeout: const Duration(milliseconds: 1000))) {
     (_dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () =>
         HttpClient()
           ..badCertificateCallback =
@@ -129,7 +129,7 @@ class NetService {
           data: jsonEncode(message),
           queryParameters: {'idToken': SettingsService.idToken});
       debugPrint('Sent message to: ${message.address}');
-    } on TimeoutException catch (e) {
+    } on TimeoutException catch (_) {
       if (retry < 3)  {
         debugPrint('postMessage() retrying');
         return postMessage(message, retry: retry + 1);

@@ -14,7 +14,7 @@ import 'package:txtr_shared/txtr_shared.dart';
 class NetService {
   final Dio _dio;
 
-  NetService() : _dio = Dio(BaseOptions(connectTimeout: const Duration(milliseconds: 1000))) {
+  NetService() : _dio = Dio(BaseOptions(connectTimeout: const Duration(milliseconds: 3000))) {
     (_dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () =>
         HttpClient()
           ..badCertificateCallback =
@@ -96,7 +96,7 @@ class NetService {
       throw Exception('No phone ip');
     }
     final String url = 'https://$host:${TxtrShared.defRestPort}/api/phone';
-    final Options options = Options(receiveTimeout: timeout ?? Globals.receiveTimeout);
+    final Options options = Options(receiveTimeout: timeout ?? Globals.receiveTimeout, sendTimeout: Globals.receiveTimeout);
     Response response = await _dio.get(url,  options: options);
     if (response.statusCode == 200) {
       return PhoneDTO.fromJson(jsonDecode(response.data));

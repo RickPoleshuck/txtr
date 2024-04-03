@@ -24,7 +24,7 @@ class NetService {
   Future<String> getUpdates() async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/updates';
+        'https://${settings.phone.ip}:${TxtrShared.defRestPort}/api/updates';
     Response response = await _dio
         .get(url, queryParameters: {'idToken': SettingsService.idToken});
     if (response.statusCode == 200) {
@@ -38,7 +38,7 @@ class NetService {
   Future<List<TxtrContactDTO>> getContacts(final DateTime lastUpdate) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/contacts';
+        'https://${settings.phone.ip}:${TxtrShared.defRestPort}/api/contacts';
     Response response = await _dio.get(url, queryParameters: {
       'idToken': SettingsService.idToken,
       'lastUpdate': lastUpdate
@@ -61,7 +61,7 @@ class NetService {
   Future<List<List<TxtrMessageDTO>>> getMessages() async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/messages';
+        'https://${settings.phone.ip}:${TxtrShared.defRestPort}/api/messages';
     Response response = await _dio
         .get(url, queryParameters: {'idToken': SettingsService.idToken});
     if (response.statusCode == 200) {
@@ -95,7 +95,7 @@ class NetService {
     if (host.isEmpty) {
       throw Exception('No phone ip');
     }
-    final String url = 'https://$host:${TxtrShared.restPort}/api/phone';
+    final String url = 'https://$host:${TxtrShared.defRestPort}/api/phone';
     final Options options = Options(receiveTimeout: timeout ?? Globals.receiveTimeout);
     Response response = await _dio.get(url,  options: options);
     if (response.statusCode == 200) {
@@ -109,7 +109,7 @@ class NetService {
   Future<String> login(final String login, final String passwd) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/login';
+        'https://${settings.phone.ip}:${TxtrShared.defRestPort}/api/login';
     Response response =
         await _dio.post(url, data: {'login': login, 'passwd': passwd});
     if (response.statusCode == 200) {
@@ -123,7 +123,7 @@ class NetService {
   Future<void> postMessage(final TxtrMessageDTO message, {int retry = 0}) async {
     final SettingsModel settings = SettingsService.load();
     final String url =
-        'https://${settings.phone.ip}:${TxtrShared.restPort}/api/message';
+        'https://${settings.phone.ip}:${TxtrShared.defRestPort}/api/message';
     try {
       await _dio.post(url,
           data: jsonEncode(message),

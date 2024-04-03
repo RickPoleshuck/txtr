@@ -49,7 +49,7 @@ class PhoneFinder {
 
     HostScanner.scanDevicesForSinglePort(
       subnet,
-      TxtrShared.restPort,
+      TxtrShared.defRestPort,
     ).listen(
       (host) async {
         // found host, check that name matches
@@ -86,7 +86,7 @@ class PhoneFinder {
     final completer = Completer<List<ActiveHost>>();
     final String subnet = myIp.substring(0, myIp.lastIndexOf('.'));
     phones.clear();
-    HostScanner.scanDevicesForSinglePort(subnet, TxtrShared.restPort,
+    HostScanner.scanDevicesForSinglePort(subnet, TxtrShared.defRestPort,
             timeout: Globals.connectTimeout,
             progressCallback: (progress) {
       debugPrint('Progress for host discovery : $progress');

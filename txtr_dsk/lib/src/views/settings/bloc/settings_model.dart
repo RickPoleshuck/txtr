@@ -27,7 +27,7 @@ class SettingsModel {
             ? PhoneDTO.fromJson(jsonDecode(json['phone']))
             : PhoneDTO.empty(),
         idToken = json['idToken'] ?? '',
-        port = int.tryParse(json['port']) ?? TxtrShared.restPort;
+        port = int.tryParse(json['port']) ?? TxtrShared.defRestPort;
 
   Map<String, dynamic> toJson() => {
         'login': login,
@@ -42,5 +42,5 @@ class SettingsModel {
         passwd = '',
         phone = PhoneDTO.empty(),
         idToken = '',
-        port = TxtrShared.restPort;
+        port = TxtrShared.defRestPort;
 }

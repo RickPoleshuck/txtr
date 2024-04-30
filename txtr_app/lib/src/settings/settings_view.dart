@@ -56,7 +56,7 @@ class SettingsView extends StatelessWidget {
                             ),
                             FormBuilderTextField(
                               name: 'passwd',
-                              obscureText: true,
+                              // obscureText: true,
                               validator: FormBuilderValidators.match('^.{8,}\$',
                                   errorText: 'Requires at least 8 characters'),
                               decoration: const SmsInputDecoration('Password'),

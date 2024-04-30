@@ -116,7 +116,7 @@ class SettingsView extends StatelessWidget {
       formData['passwd'],
       phone,
       '',
-      int.tryParse(formData['ip']) ?? TxtrShared.defRestPort,
+      int.tryParse(formData['phoneIp']) ?? TxtrShared.defRestPort,
     );
     return settings;
   }

@@ -1,6 +1,6 @@
-import 'package:flutter_sms/flutter_sms.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:txtr_shared/txtr_shared.dart';
+import 'package:background_sms/background_sms.dart';
 
 class Sms {
   final _query = SmsQuery();
@@ -18,12 +18,8 @@ class Sms {
     return messages;
   }
 
-  Future<String> send(final TxtrMessageDTO message) async {
-    String result =
-        await sendSMS(message: message.body, recipients: [message.address])
-            .catchError((e) {
-      return e.toString();
-    });
+  Future<SmsStatus> send(final TxtrMessageDTO message) async {
+    SmsStatus result = await BackgroundSms.sendMessage(phoneNumber: message.address, message: message.body);
     return result;
   }
 }

@@ -11,6 +11,7 @@ environment:
   flutter: 3.10.5 # for now this is a comment on what version of flutter is recommended
 
 dependencies:
+  background_sms:
   device_info_plus: ^10.0.1
   dio: ^5.2.1+1
   equatable: ^2.0.5
@@ -23,7 +24,6 @@ dependencies:
   flutter_local_notifications: ^17.0.0
   flutter_localizations:
     sdk: flutter
-  flutter_sms: ^2.3.3
   flutter_sms_inbox: ^1.0.3
   form_builder_validators: ^9.0.0
   network_info_plus: ^5.0.2

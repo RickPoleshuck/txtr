@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:background_sms/background_sms.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -186,9 +187,11 @@ class RestServer {
     final String query = await request.readAsString();
     Map<String, dynamic> queryParams = jsonDecode(query);
     final TxtrMessageDTO message = TxtrMessageDTO.fromJson(queryParams);
-    final String result = await Sms().send(message);
-
-    return Response.ok(result);
+    final SmsStatus status = await Sms().send(message);
+    if (status == SmsStatus.sent) {
+      return Response.ok(status);
+    }
+    return Response.badRequest(body: 'Send failed');
   }
 
   String _messageToJson(final List<SmsMessage> messages) {

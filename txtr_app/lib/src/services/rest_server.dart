@@ -189,7 +189,7 @@ class RestServer {
     final TxtrMessageDTO message = TxtrMessageDTO.fromJson(queryParams);
     final SmsStatus status = await Sms().send(message);
     if (status == SmsStatus.sent) {
-      return Response.ok(status);
+      return Response.ok('');
     }
     return Response.badRequest(body: 'Send failed');
   }
